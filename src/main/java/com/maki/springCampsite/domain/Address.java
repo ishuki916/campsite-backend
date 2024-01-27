@@ -9,7 +9,14 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Data
 public class Address {
 
-    private String district;
+    private District district;
 
     private String address;
+
+    public static Address of(String district, String address) {
+        return Address.builder()
+                .district(District.of(district))
+                .address(address)
+                .build();
+    }
 }

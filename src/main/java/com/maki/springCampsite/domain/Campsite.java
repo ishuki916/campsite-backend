@@ -31,12 +31,25 @@ public class Campsite {
     private Integer area;
 
     private List<Facility> facilities;
-    public Campsite of(CreateCampsiteReq req){
-        return null;
+    public static Campsite of(CreateCampsiteReq req){
+        Campsite campsite = Campsite.builder()
+                .name(req.getName())
+                .info(req.getInfo())
+                .pricePerNights(req.getPricePerNights())
+                .address(Address.of(req.getAddress(), req.getDistrict()))
+                .trafficInfo(req.getTrafficInfo())
+                .facilities(Facility.of(req.getFacilities()))
+                .area(req.getArea())
+                .build();
+        campsite.valid();
+        return campsite;
     }
 
     public void valid(){
         if(this.name == null || this.name.isEmpty()){
+            throw new RuntimeException();
+        }
+        if(this.pricePerNights.compareTo(BigDecimal.ZERO) == 0){
             throw new RuntimeException();
         }
     }
