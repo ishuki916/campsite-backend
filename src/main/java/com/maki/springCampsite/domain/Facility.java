@@ -1,5 +1,7 @@
 package com.maki.springCampsite.domain;
 
+import com.maki.springCampsite.exception.CampsiteException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +16,7 @@ public enum Facility {
             try {
                 facilityEnumList.add(Facility.valueOf(f));
             } catch (IllegalArgumentException e) {
-                throw new RuntimeException();
+                throw new CampsiteException(CampsiteException.FACILITY_ERROR);
             }
         }
         return facilityEnumList;

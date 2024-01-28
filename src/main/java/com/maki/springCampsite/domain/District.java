@@ -1,5 +1,7 @@
 package com.maki.springCampsite.domain;
 
+import com.maki.springCampsite.exception.CampsiteException;
+
 public enum District {
     TAIPEI, NEW_TAIPEI_CITY;
 
@@ -7,7 +9,7 @@ public enum District {
         try {
             return District.valueOf(district);
         } catch (IllegalArgumentException e) {
-            throw new RuntimeException();
+            throw new CampsiteException(CampsiteException.DISTRICT_ERROR);
         }
     }
 

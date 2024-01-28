@@ -1,13 +1,13 @@
 package com.maki.springCampsite.domain;
 
 import com.maki.springCampsite.endpoints.req.CreateCampsiteReq;
+import com.maki.springCampsite.exception.CampsiteException;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 @Builder
@@ -31,7 +31,8 @@ public class Campsite {
     private Integer area;
 
     private List<Facility> facilities;
-    public static Campsite of(CreateCampsiteReq req){
+
+    public static Campsite of(CreateCampsiteReq req) {
         Campsite campsite = Campsite.builder()
                 .name(req.getName())
                 .info(req.getInfo())
@@ -45,15 +46,14 @@ public class Campsite {
         return campsite;
     }
 
-    public void valid(){
-        if(this.name == null || this.name.isEmpty()){
-            throw new RuntimeException();
+    public void valid() {
+        if (this.name == null || this.name.isEmpty()) {
+            throw new CampsiteException(CampsiteException.NAME_ERROR);
         }
-        if(this.pricePerNights.compareTo(BigDecimal.ZERO) == 0){
-            throw new RuntimeException();
+        if (this.pricePerNights == null || this.pricePerNights.compareTo(BigDecimal.ZERO) < 0) {
+            throw new CampsiteException(CampsiteException.PRICE_ERROR);
         }
     }
-
 
 
 }
