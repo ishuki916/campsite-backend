@@ -6,6 +6,8 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/user")
@@ -20,7 +22,12 @@ public class UserApi {
     }
 
     @GetMapping
-    public boolean findUser() {
-        return true;
+    public List<User> findUsers() {
+        return userService.findUsers();
+    }
+
+    @GetMapping("/{id}")
+    public User findUserById(@PathVariable("id")String id) {
+        return userService.findById(id);
     }
 }

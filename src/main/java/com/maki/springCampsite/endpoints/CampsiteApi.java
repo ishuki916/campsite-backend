@@ -3,7 +3,7 @@ package com.maki.springCampsite.endpoints;
 import com.maki.springCampsite.domain.Campsite;
 import com.maki.springCampsite.endpoints.req.CreateCampsiteReq;
 import com.maki.springCampsite.endpoints.res.CreateCampsiteRes;
-import com.maki.springCampsite.usecase.CreateCampsiteService;
+import com.maki.springCampsite.usecase.CampsiteService;
 import com.maki.springCampsite.usecase.FindCampsiteService;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ import java.util.Map;
 public class CampsiteApi {
 
     @NonNull
-    private final CreateCampsiteService createCampsiteService;
+    private final CampsiteService campsiteService;
 
     @NonNull
     private final FindCampsiteService findCampsiteService;
@@ -28,7 +28,7 @@ public class CampsiteApi {
 
     @PostMapping
     public CreateCampsiteRes createCampsite(@RequestBody CreateCampsiteReq req) {
-        Campsite result = createCampsiteService.execute(req);
+        Campsite result = campsiteService.execute(req);
         return CreateCampsiteRes.builder()
                 .id(result.getId())
                 .build();
@@ -37,20 +37,32 @@ public class CampsiteApi {
     /**
      * 多條件搜尋
      **/
-    @GetMapping
-    public List<Campsite> findCampsites(@RequestParam Map<String, String> paramMap) {
+    @GetMapping("/criteria")
+    public List<Campsite> findCampsitesByCriteria(@RequestParam Map<String, String> paramMap) {
         log.debug("findCampsites() paramMap = {}", paramMap);
         return findCampsiteService.execute(paramMap);
     }
 
+    @GetMapping
+    public List<Campsite> findCampsites() {
+        return campsiteService.findAll();
+    }
+
+    @GetMapping("/{id}")
+    public Campsite findById(@PathVariable("id")String id) {
+        log.debug("findCampById() id = {}", id);
+        return campsiteService.findById(id);
+    }
+
     @PutMapping("/{id}")
-    public boolean updateCampsite(@PathVariable String id) {
-        return true;
+    public boolean updateCampsite(@PathVariable String id,
+                                  @RequestBody CreateCampsiteReq req) {
+        return campsiteService.update(id,req);
     }
 
     @DeleteMapping("/{id}")
     public boolean deleteCampsite(@PathVariable String id) {
-        return true;
+        return campsiteService.delete(id);
     }
 
 

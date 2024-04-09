@@ -11,6 +11,8 @@ public class CampsiteException extends RuntimeException {
 
     public static final String FACILITY_ERROR = "設施類別錯誤";
 
+    public static final String ID_ERROR = "Id 錯誤";
+
 
     public CampsiteException() {
         super(ERROR_MSG);

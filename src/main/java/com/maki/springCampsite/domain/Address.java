@@ -2,8 +2,6 @@ package com.maki.springCampsite.domain;
 
 import lombok.Builder;
 import lombok.Data;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 @Builder
 @Data
@@ -13,7 +11,7 @@ public class Address {
 
     private String address;
 
-    public static Address of(String district, String address) {
+    public static Address of(String address, String district) {
         return Address.builder()
                 .district(District.of(district))
                 .address(address)

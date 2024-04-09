@@ -1,5 +1,6 @@
 package com.maki.springCampsite.usecase;
 
+import com.maki.springCampsite.dataprovider.CampsiteDAO;
 import com.maki.springCampsite.domain.Campsite;
 import com.maki.springCampsite.endpoints.req.CreateCampsiteReq;
 import com.maki.springCampsite.gateway.CampsiteGateway;
@@ -14,10 +15,10 @@ import java.util.Map;
 @Service
 public class FindCampsiteService {
     @NonNull
-    CampsiteGateway campsiteGateway;
+    private final CampsiteDAO campsiteDAO;
 
     public List<Campsite> execute(Map<String,String> paramMap) {
-        return null;
+        return campsiteDAO.findByCriteria(paramMap);
     }
 
 }
