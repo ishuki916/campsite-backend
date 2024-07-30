@@ -16,7 +16,7 @@ public class UserApi {
     UserService userService;
 
 
-    @PostMapping
+    @PostMapping("/sign-up")
     public void signUp(@RequestBody User user) {
         userService.insertUser(user);
     }
