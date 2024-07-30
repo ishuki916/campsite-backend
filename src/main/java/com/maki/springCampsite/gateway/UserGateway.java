@@ -12,4 +12,9 @@ public interface UserGateway {
     List<User> findUsers();
 
     Optional<User> findUserById(String id);
+
+    Optional<User> findUserByUsername(String username);
+
+    Boolean existByUsername(String username);
+
 }

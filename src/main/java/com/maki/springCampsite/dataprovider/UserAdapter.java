@@ -29,4 +29,14 @@ public class UserAdapter implements UserGateway {
     public Optional<User> findUserById(String id) {
         return userRepo.findById(id);
     }
+
+    @Override
+    public Boolean existByUsername(String username) {
+        return userRepo.existsByUsername(username);
+    }
+
+    @Override
+    public Optional<User> findUserByUsername(String username) {
+        return userRepo.findUserByUsername(username);
+    }
 }

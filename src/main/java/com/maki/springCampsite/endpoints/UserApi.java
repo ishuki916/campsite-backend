@@ -17,8 +17,13 @@ public class UserApi {
 
 
     @PostMapping
-    public void createUser(@RequestBody User user) {
+    public void signUp(@RequestBody User user) {
         userService.insertUser(user);
+    }
+
+    @PostMapping("/login")
+    public String login(@RequestBody User user) {
+        return userService.login(user);
     }
 
     @GetMapping
@@ -27,7 +32,7 @@ public class UserApi {
     }
 
     @GetMapping("/{id}")
-    public User findUserById(@PathVariable("id")String id) {
+    public User findUserById(@PathVariable("id") String id) {
         return userService.findById(id);
     }
 }
