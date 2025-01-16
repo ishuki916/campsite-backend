@@ -1,19 +1,25 @@
 package com.maki.springCampsite.usecase;
 
 import com.maki.springCampsite.domain.User;
+import com.maki.springCampsite.endpoints.res.LoginRes;
 import com.maki.springCampsite.exception.UserException;
 import com.maki.springCampsite.gateway.UserGateway;
 import com.maki.springCampsite.utils.JwtTokenUtil;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @RequiredArgsConstructor
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
     @NonNull
     UserGateway userGateway;
     @NonNull
@@ -32,7 +38,7 @@ public class UserService {
         userGateway.insertUser(user);
     }
 
-    public String login(User user) {
+    public LoginRes login(User user) {
         user.validate();
         User userFromDB = userGateway.findUserByUsername(user.getUsername())
                 .orElseThrow(() -> new UserException(UserException.USERNAME_ERROR));
@@ -40,7 +46,14 @@ public class UserService {
         if (!isCorrectPassword) {
             throw new UserException(UserException.PASSWORD_ERROR);
         }
-        return jwtTokenUtil.generateToken(userFromDB.getId());
+
+        String userId = userFromDB.getId();
+        log.info("userId: {}", userId);
+
+        return LoginRes.builder()
+                .id(userId)
+                .token(jwtTokenUtil.generateToken(userId))
+                .build();
     }
 
     public List<User> findUsers() {
@@ -52,4 +65,9 @@ public class UserService {
                 .orElseThrow(() -> new UserException(UserException.ID_ERROR));
     }
 
+    @Override
+    public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
+        return userGateway.findUserById(id)
+                .orElseThrow(() -> new UserException(UserException.ID_ERROR));
+    }
 }
