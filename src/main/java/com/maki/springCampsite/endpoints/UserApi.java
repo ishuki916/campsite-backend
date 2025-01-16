@@ -7,6 +7,7 @@ import com.maki.springCampsite.usecase.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,18 +29,21 @@ public class UserApi {
     @Operation(summary = "登入")
     @PostMapping("/login")
     public ResponseEntity<LoginRes> login(@RequestBody User user) {
-        return ResponseEntity.ok(userService.login(user));
+        Pair<String, String> userIdAndToken = userService.login(user);
+        return ResponseEntity.ok(LoginRes.builder()
+                .token(userIdAndToken.getRight())
+                .id(userIdAndToken.getLeft()).build());
     }
 
     @Operation(summary = "取得所有使用者")
     @GetMapping("/user")
-    public List<User> findUsers() {
-        return userService.findUsers();
+    public ResponseEntity<List<User>> findUsers() {
+        return ResponseEntity.ok(userService.findUsers());
     }
 
     @Operation(summary = "根據id取得使用者")
     @GetMapping("/user/{id}")
-    public User findUserById(@PathVariable("id") String id) {
-        return userService.findById(id);
+    public ResponseEntity<User> findUserById(@PathVariable("id") String id) {
+        return ResponseEntity.ok(userService.findById(id));
     }
 }

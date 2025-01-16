@@ -24,7 +24,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers(HttpMethod.POST, "/login").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/sign-up").permitAll()
-                                .requestMatchers(HttpMethod.GET, "/user").hasRole("USER")
+                                .requestMatchers(HttpMethod.GET, "/user").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.GET, "/user/**").hasRole("USER")
                                 .anyRequest().permitAll()
                 )
                 .exceptionHandling(exceptionHandling ->

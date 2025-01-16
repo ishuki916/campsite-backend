@@ -8,6 +8,7 @@ import com.maki.springCampsite.utils.JwtTokenUtil;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -38,7 +39,7 @@ public class UserService implements UserDetailsService {
         userGateway.insertUser(user);
     }
 
-    public LoginRes login(User user) {
+    public Pair<String,String> login(User user) {
         user.validate();
         User userFromDB = userGateway.findUserByUsername(user.getUsername())
                 .orElseThrow(() -> new UserException(UserException.USERNAME_ERROR));
@@ -50,10 +51,7 @@ public class UserService implements UserDetailsService {
         String userId = userFromDB.getId();
         log.info("userId: {}", userId);
 
-        return LoginRes.builder()
-                .id(userId)
-                .token(jwtTokenUtil.generateToken(userId))
-                .build();
+        return Pair.of(userId, jwtTokenUtil.generateToken(userId));
     }
 
     public List<User> findUsers() {
