@@ -1,6 +1,7 @@
 package com.maki.springCampsite.domain;
 
 import com.maki.springCampsite.domain.constant.Auth;
+import com.maki.springCampsite.domain.constant.UserSource;
 import lombok.Builder;
 import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
@@ -24,6 +25,11 @@ public class User implements UserDetails {
     private String password;
 
     private String username;
+
+    private String email;
+
+    // source of user, e.g. google, facebook, etc.
+    private UserSource source;
 
     private Auth auth;
 
